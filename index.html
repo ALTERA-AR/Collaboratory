@@ -1,0 +1,64 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aframe-extras@6.1.1/dist/aframe-extras.min.js"></script>
+  </head>
+  <body>
+    <a-scene mindar-image="imageTargetSrc: targets.mind" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false" >
+      
+      <a-assets>
+        <a-asset-item id="Animacion0" src="logoutl.glb"></a-asset-item>
+        <a-asset-item id="Animacion3" src=""></a-asset-item>
+        <a-asset-item id="Animacion4" src=""></a-asset-item>
+        <a-asset-item id="Animacion5" src=""></a-asset-item>
+      </a-assets>
+
+      <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+      
+      <a-entity mindar-image-target="targetIndex: 0">
+        <a-gltf-model rotation="0 90 0" position=".2 -1 -2" scale="0.5 0.5 0.5" src="#Animacion0" animation-mixer> </a-gltf-model>
+      </a-entity>
+      
+      <a-entity mindar-image-target="targetIndex: 1">
+        <a-gltf-model rotation="0 0 0" position="1 1 0" scale="0.5 0.5 0.5" src="#Animacion1" animation-mixer> </a-gltf-model>
+      </a-entity>
+
+      <!-- targetIndex 2 para Snake -->
+      <a-entity id="anchor2" mindar-image-target="targetIndex: 2">
+        <a-gltf-model id="modelo-temp" src="#Animacion2" rotation="180 90 180" position="2 0 0" scale="0.09 0.09 0.09" animation-mixer> </a-gltf-model>
+      </a-entity>
+
+      <!-- contenedor para el modelo liberado -->
+      <a-entity id="modelo-libre" visible="false"></a-entity>
+    </a-scene>
+
+    <!-- Script para liberar el modelo -->
+    <script>
+      AFRAME.registerComponent('liberar-modelo', {
+        init: function () {
+          const anchor = document.querySelector('#anchor2');
+          const modeloTemp = document.querySelector('#modelo-temp');
+          const modeloLibre = document.querySelector('#modelo-libre');
+
+          anchor.addEventListener('targetFound', () => {
+            if (modeloLibre.hasChildNodes()) return; // Evita múltiples clones
+
+            const nuevoModelo = modeloTemp.cloneNode(true);
+            nuevoModelo.setAttribute('position', '0 0 -1'); // frente a la cámara
+            nuevoModelo.setAttribute('scale', '0.09 0.09 0.09');
+            nuevoModelo.setAttribute('animation-mixer', '');
+
+            modeloLibre.appendChild(nuevoModelo);
+            modeloLibre.setAttribute('visible', 'true');
+            anchor.setAttribute('visible', 'false');
+          });
+        }
+      });
+
+      // Activa el componente
+      document.querySelector('a-scene').setAttribute('liberar-modelo', '');
+    </script>
+  </body>
+</html>
