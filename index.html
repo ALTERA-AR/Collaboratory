@@ -1,65 +1,81 @@
 <html>
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/aframe-extras@6.1.1/dist/aframe-extras.min.js"></script>
-  </head>
-  <body>
-    <a-scene mindar-image="imageTargetSrc: targets.mind" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false" >
-      
-      <a-assets>
-        <a-asset-item id="Animacion0" src="logoutl.glb"></a-asset-item>
-        <a-asset-item id="Animacion3" src=""></a-asset-item>
-        <a-asset-item id="Animacion4" src=""></a-asset-item>
-        <a-asset-item id="Animacion5" src=""></a-asset-item>
-      </a-assets>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aframe-extras@6.1.1/dist/aframe-extras.min.js"></script>
 
-      <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
-      
-      <a-entity mindar-image-target="targetIndex: 0">
-        <a-gltf-model rotation="0 90 0" position="0.3 -0.5 -2" scale="0.5 0.5 0.5" src="#Animacion0" animation-mixer> </a-gltf-model>
-      </a-entity>
-      
-      <a-entity mindar-image-target="targetIndex: 1">
-        <a-gltf-model rotation="0 0 0" position="1 1 0" scale="0.5 0.5 0.5" src="#Animacion1" animation-mixer> </a-gltf-model>
-      </a-entity>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+    }
+    #boton-instagram {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 12px 20px;
+      font-size: 16px;
+      background-color: #efd5e8;
+      color: rgb(14, 1, 1);
+      border: none;
+      border-radius: 8px;
+      z-index: 10;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <!-- Botón que redirige a Instagram -->
+  <!--<button id="boton-instagram">✨ Más como esto ✨</button>-->
 
-      <!-- targetIndex 2 para Snake -->
-      <a-entity id="anchor2" mindar-image-target="targetIndex: 2">
-        <a-gltf-model id="modelo-temp" src="#Animacion2" rotation="180 90 180" position="2 0 0" scale="0.09 0.09 0.09" animation-mixer> </a-gltf-model>
-      </a-entity>
+  <a-scene
+    mindar-image="imageTargetSrc: targets.mind; missTolerance: 20; filterMinCF: 0.0001; filterBeta: 0.01;"
+>
 
-      <!-- contenedor para el modelo liberado -->
-      <a-entity id="modelo-libre" visible="false"></a-entity>
-    </a-scene>
+    <a-assets>
+      <a-asset-item id="Animacion0" src="src/LogoUTL.glb"></a-asset-item>
+      <a-asset-item id="Animacion1" src="src/Lion.glb"></a-asset-item>
+    </a-assets>
 
-    <!-- Script para liberar el modelo -->
-    <script>
-      AFRAME.registerComponent('liberar-modelo', {
-        init: function () {
-          const anchor = document.querySelector('#anchor2');
-          const modeloTemp = document.querySelector('#modelo-temp');
-          const modeloLibre = document.querySelector('#modelo-libre');
+    <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
-          anchor.addEventListener('targetFound', () => {
-            if (modeloLibre.hasChildNodes()) return; // Evita múltiples clones
+    <!-- Anchor principal -->
 
-            const nuevoModelo = modeloTemp.cloneNode(true);
-            nuevoModelo.setAttribute('position', '0 0 -1'); // frente a la cámara
-            nuevoModelo.setAttribute('scale', '0.09 0.09 0.09');
-            nuevoModelo.setAttribute('animation-mixer', '');
+    <a-entity id="anchor3" mindar-image-target="targetIndex: 0"  smooth="true" smoothCount="10" smoothTolerance="0.01" smoothThreshold="5">
+      <a-gltf-model id="modelo-temp" src="#Animacion0" rotation="0 95 0" position="0 -1 -1" scale="0.3 0.3 0.3" animation-mixer>
+      </a-gltf-model>
+    </a-entity>
+    <a-entity id="anchor3" mindar-image-target="targetIndex: 1"  smooth="true" smoothCount="10" smoothTolerance="0.01" smoothThreshold="5">
+      <a-gltf-model id="modelo-temp" src="#Animacion1" rotation="45 0 0" position="0 0 0" scale="0.7 0.7 0.7" animation-mixer>
+      </a-gltf-model>
+    </a-entity>
+    <a-entity id="anchor3" mindar-image-target="targetIndex: 2"  smooth="true" smoothCount="10" smoothTolerance="0.01" smoothThreshold="5">
+      <a-gltf-model id="modelo-temp" src="#Animacion0" rotation="0 95 0" position="0 -1 -1" scale="0.3 0.3 0.3" animation-mixer>
+      </a-gltf-model>
+    </a-entity>
+    <a-entity id="anchor3" mindar-image-target="targetIndex: 3"  smooth="true" smoothCount="10" smoothTolerance="0.01" smoothThreshold="5">
+      <a-gltf-model id="modelo-temp" src="#Animacion0" rotation="0 95 0" position="0 -1 -1" scale="0.3 0.3 0.3" animation-mixer>
+      </a-gltf-model>
+    </a-entity>
+  </a-scene>
+  <!-- Script de sonido -->
+  <script>
+    const anchor = document.querySelector('#anchor3');
+    const audio = document.querySelector('#audioRA');
 
-            modeloLibre.appendChild(nuevoModelo);
-            modeloLibre.setAttribute('visible', 'true');
-            anchor.setAttribute('visible', 'false');
-          });
-        }
-      });
+    anchor.addEventListener('targetFound', () => audio.play());
+    anchor.addEventListener('targetLost', () => {
+      audio.pause();
+      audio.currentTime = 0; // reinicia al inicio
+    });
 
-      // Activa el componente
-      document.querySelector('a-scene').setAttribute('liberar-modelo', '');
-    </script>
-  </body>
+    // Redirección del botón
+    document.getElementById('boton-instagram').addEventListener('click', () => {
+      window.open('https://www.instagram.com/altera.ar/', '_blank');
+    });
+  </script>
+</body>
 </html>
 
